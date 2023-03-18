@@ -1,7 +1,7 @@
 /*
  *  Scroll Text Display using a 4x8 Font.  
  * 
- *  Copyright(C) 2022 Robin Grosset
+ *  Copyright(C) 2023 Robin Grosset
  *  
  *  This file and the entire 4x8 font data created for this project 
  *  is shared under the MIT license 
@@ -47,7 +47,7 @@ module top (
 	assign { lcol4, lcol3, lcol2, lcol1 } = lcol[3:0];
 	
 	// a 32 bit counter used to scroll the text
-    reg [31:0] counter = 32'b0;
+        reg [31:0] counter = 32'b0;
 
 	// Gerald's led scan module this manages the display logic to mutiplex the 
 	// led control lines. Like a matrix keyboard but in reverse. 
@@ -62,7 +62,7 @@ module top (
 	);
 
 
-    // This is count of vertial lines in the entire set of characters. 
+        // This is count of vertial lines in the entire set of characters. 
 	// we are going to scroll the lines across the screen 
 	localparam lines = 65;
 	reg [7:0] line_count = 65;
