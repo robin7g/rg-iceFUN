@@ -1,7 +1,7 @@
 /*
  *  Scroll Text Display using a 4x8 Font.  
  * 
- *  Copyright(C) 2022 Robin Grosset
+ *  Copyright(C) 2023 Robin Grosset
  *  
  *  This file and the entire 4x8 font data created for this project 
  *  is shared under the MIT license 
