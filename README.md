@@ -5,9 +5,17 @@ FPGA code examples for the iceFUN board. The example here is a scrolling 'HELLO 
 
 ## Pre-requisites
 
-You need open source FPGA development tools like *yosys*, *nextpnr-ice40*, *icepack* and *iceFUNprog*. I pretty much work on MacOS and these tools work great there but will also install on a Windows or Linux machine. 
+You need open source FPGA development tools for the ice40 FPGA like **yosys**, **nextpnr-ice40**, **icepack** and **iceFUNprog**. I pretty much work on MacOS and these tools work great there but will also install on a Windows or Linux machine. Here is a link to an up to date tool chain.
 
 https://github.com/YosysHQ/oss-cad-suite-build
+
+I started working on ice40 FPGAs using the FOMU workshop which has some goo instructions on ice40 toolchains and how to get setup. I will leave a link here 
+
+https://workshop.fomu.im/en/latest/requirements/software.html
+
+For **iceFUNprog** if you are on MacOS you can download and build my version here which fixes a segmentation fault in the original Linux version. 
+
+https://github.com/robin7g/iceFUNprog
 
 ## Install & Build
 
