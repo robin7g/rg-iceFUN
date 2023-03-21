@@ -1,7 +1,7 @@
 # rg-iceFUN
 FPGA code examples for the iceFUN board. The example here is a scrolling 'HELLO WORLD!' display.  
 
-![iceFUN-E](iceFUN-E.jpg)
+![iceFUN-E](https://github.com/robin7g/rg-iceFUN/blob/main/images/iceFUN-Animated.gif)
 
 ## Pre-requisites
 
