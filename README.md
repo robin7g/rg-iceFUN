@@ -3,7 +3,7 @@ FPGA code examples for the iceFUN board. The example here is a scrolling 'HELLO 
 
 ![iceFUN-E](https://github.com/robin7g/rg-iceFUN/blob/main/images/iceFUN-Animated.gif)
 
-## Pre-requisites
+## Prerequisites
 
 You need open source FPGA development tools for the ice40 FPGA like **yosys**, **nextpnr-ice40**, **icepack** and **iceFUNprog**. I pretty much work on MacOS and these tools work great there but will also install on a Windows or Linux machine. Here is a link to an up to date tool chain.
 
