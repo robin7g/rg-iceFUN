@@ -23,6 +23,9 @@ Install Code
 ```
 git clone git@github.com:robin7g/rg-iceFUN.git
 cd rg-iceFUN
+```
+Change into chosen project directory
+```
 cd scrolltext
 ```
 Make and then install on your iceFUN
