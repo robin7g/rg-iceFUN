@@ -8,6 +8,7 @@
  */
  
 `include "pll.v" 
+`include "ledscan.v"
 
 module top (
 	input clk12MHz, 
@@ -23,7 +24,6 @@ module top (
 
 	// a 32 bit counter used to scroll the text
     reg [31:0] counter = 32'b0;
-	reg [31:0] counter21 = 32'b0;
 	reg [31:0] offset = 32'b0;
 
 	wire clk;
@@ -39,12 +39,8 @@ module top (
 
 	// increment the counter every clock and after a certain number of clocks
 	// we shift the pixel lines along. 	
-    always @ (posedge clk12MHz) begin
-        counter <= counter + 1;
-    end
-
 	always @ (posedge clk) begin
-        counter21 <= counter21 + 1;
+        counter <= counter + 1;
     end
 
 
@@ -64,48 +60,27 @@ module top (
 	reg [9:0] hc;
 	reg [9:0] vc;
 
-	parameter  _cBK = 6'b000000; // Black
-	parameter  _cWT = 6'b111111; // White
-
-	parameter  _cG0 = 6'b001100; // Green
-	parameter  _cG1 = 6'b011100;
-	parameter  _cG2 = 6'b101100;
-	parameter  _cY0 = 6'b111100; // Yellow
-	parameter  _cY1 = 6'b111000;
-	parameter  _cY2 = 6'b110100;
-	parameter  _cR0 = 6'b110000; // Red
-	parameter  _cR1 = 6'b110001; 
-	parameter  _cR2 = 6'b110010; 
-	parameter  _cP0 = 6'b110011; // Purple
-	parameter  _cP1 = 6'b100011; 
-	parameter  _cP2 = 6'b010011; 
-	parameter  _cB0 = 6'b000011; // Blue
-	parameter  _cB1 = 6'b000111; 
-	parameter  _cB2 = 6'b001011; 
-	parameter  _cC0 = 6'b001111; // Cyan
-	parameter  _cC1 = 6'b001110; 
-	parameter  _cC2 = 6'b001101; 
-	// go back to green _cG0
-
-	reg [107:0] colors = { // each bar is 36-ish pixels each
-		_cG0, // 0  - Green
-		_cG1, // 1
-		_cG2, // 2
-		_cY0, // 3  - Yellow
-		_cY1, // 4
-		_cY2, // 5
-		_cR0, // 6 - Red
-		_cR1, // 7
-		_cR2, // 8
-		_cP0, // 9 - Purple
-		_cP1, // 10
-		_cP2, // 11
-		_cB0, // 12 - Blue
-		_cB1, // 13 
-		_cB2, // 14
-		_cC0, // 15 - Cyan
-		_cC1, // 16
-		_cC2 // 17
+	reg [119:0] colors = { // each bar is 36-ish pixels each
+		6'b001100, // 0  - Green
+		6'b011100, // 1
+		6'b101100, // 2
+		6'b111100, // 3  - Yellow
+		6'b111000, // 4
+		6'b110100, // 5
+		6'b110000, // 6 - Red
+		6'b110001, // 7
+		6'b110010, // 8
+		6'b110011, // 9 - Purple
+		6'b100011, // 10
+		6'b010011, // 11
+		6'b000011, // 12 - Blue
+		6'b000111, // 13 
+		6'b001011, // 14
+		6'b001111, // 15 - Cyan
+		6'b001110, // 16
+		6'b001101, // 17
+		6'b111111, // White
+		6'b000000 // Black
 	}; // this colour bar car cycle as got back to green .. 
 
 	always @(posedge clk)
@@ -136,15 +111,20 @@ module top (
 	assign vga_vsync = (vc < vpulse) ? 0:1;
 
 	reg [9:0] idx;
-	
-	
-	always @(hc,vc)
+	reg [10:0] x;
+	reg [10:0] y;
+	reg [3:0] x_mod_16;
+	reg [0:0] x_mod_2;
+
+	always @(posedge clk)
 	begin
+		x <= (vc-vbp);
+		y <= (hc-hbp);
 		// first check if we're within vertical active video range
-		if (vc >= vbp && vc < vfp)
+		if (x >= 0 && x < 480)
 		begin
 			// hbp = 144
-			if (hc >= hbp && hc < (hbp+640))
+			if (y >= 0 && y < 640)
 			begin
 				// within 640 pixels we can fit nearly 18 colours 36 pixels wide
 				// the following calculation selects the idx of the colour
@@ -152,13 +132,16 @@ module top (
 				// the scan lines are egnerated 
 				// offset variable is updated 25 times a second
 				// and allows the bars to scroll.. 
-				idx = (107-(6*(((hc-hbp + offset)/35)%18)));
-				vga_r1 = colors[ idx - 0];
-				vga_r2 = colors[ idx - 1];
-				vga_g1 = colors[ idx - 2];
-				vga_g2 = colors[ idx - 3];
-				vga_b1 = colors[ idx - 4];
-				vga_b2 = colors[ idx - 5];
+				idx = (y+offset)>>5;
+				x_mod_16 = idx[3:0]; // x % 16
+    				x_mod_2 = idx[0];    // x % 2
+				idx <= (x_mod_16+x_mod_2) * 6; // x % 18 * 6
+				vga_r1 <= colors[idx];
+				vga_r2 <= colors[idx-1];
+				vga_g1 <= colors[idx-2];
+				vga_g2 <= colors[idx-3];
+				vga_b1 <= colors[idx-4];
+				vga_b2 <= colors[idx-5];
 			end
 			else
 			// we're outside active horizontal range so display black
