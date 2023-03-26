@@ -1,7 +1,14 @@
 # rg-iceFUN
 FPGA code examples for the iceFUN board. The example here is a scrolling 'HELLO WORLD!' display.  
 
+ScrollText
 ![iceFUN-E](https://github.com/robin7g/rg-iceFUN/blob/main/images/iceFUN-Animated.gif)
+VGA Rainbow
+![vgarainbow](https://github.com/robin7g/rg-iceFUN/blob/main/images/vgarainbow.gif)
+VGA Circles
+![vgacircles](https://github.com/robin7g/rg-iceFUN/blob/main/images/vgacircles.gif)
+VGA Bitmap
+![vgabitmap](https://github.com/robin7g/rg-iceFUN/blob/main/images/vgabitmap.png)
 
 ## Prerequisites
 
