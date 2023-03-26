@@ -88,9 +88,7 @@ module top (
 	reg [7:0] data;
 
 	// Store the image in embedded RAM
-	// this is an 8 bit bitmap 160 x 120 pixels
-	// colour data is only in the first 6 bits 
-	// of each byte.  
+	// this is an 6 bit bitmap 160 x 120 pixels
 	//
 	// Note this image consumes 93% of the iceFUN RAM
 
