@@ -8,7 +8,7 @@ width, height = img.size
 
 print("Width = "+str(width))
 print("Height = "+str(height))
-newsize = (128, 96)
+newsize = (160, 120)
 img = img.resize(newsize)
 
 width, height = img.size
@@ -16,7 +16,7 @@ print("Width = "+str(width))
 print("Height = "+str(height))
 
 # Open the output file for writing
-f = open("image.hex", "w")
+f = open("image.bin", "w")
 
 # Iterate over each pixel in the image and write the color data to the output file
 for y in range(height):
@@ -30,11 +30,8 @@ for y in range(height):
         b = (color[2] >> 6) & 0b11
 
         # Combine the color channels into a single 8-bit value and write it to the output file
-        value = (r << 6) | (g << 4) | (b << 2)
-        f.write("{:02X}\n".format(value))
+        value = (r << 4) | (g << 2) | (b << 0)
+        f.write("{0:b}\n".format(value))
 
 # Close the output file
 f.close()
-
-
-
