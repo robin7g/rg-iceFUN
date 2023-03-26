@@ -34,9 +34,9 @@ make
 make burn
 ```
 
-## The VGA projects require a small circuit to be built using just reissters and a VGA connector.
+## The VGA projects 
 
-
+All the project which have VGA in thier title require a small circuit to be built using just resisters and a VGA connector. The schematic for this is shown below. 
 
 
 ### VGA Rainbow
