@@ -1,5 +1,13 @@
 # rg-iceFUN
-FPGA code examples for the iceFUN board. The example here is a scrolling 'HELLO WORLD!' display.  
+
+The repository contains FPGA code examples for the iceFUN board. I created these as I was learning how to code Verilog. 
+
+More details about the board can be found here 
+
+[www.robot-electronics.co.uk](https://www.robot-electronics.co.uk/products/fpga/icefun.html)
+
+
+The example below is a scrolling 'HELLO WORLD!' display.  
 
 ![iceFUN-E](https://github.com/robin7g/rg-iceFUN/blob/main/images/iceFUN-Animated.gif)
 
