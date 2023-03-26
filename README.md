@@ -1,7 +1,6 @@
 # rg-iceFUN
 FPGA code examples for the iceFUN board. The example here is a scrolling 'HELLO WORLD!' display.  
 
-ScrollText
 ![iceFUN-E](https://github.com/robin7g/rg-iceFUN/blob/main/images/iceFUN-Animated.gif)
 
 ## Prerequisites
@@ -35,12 +34,16 @@ make
 make burn
 ```
 
+## The VGA projects require a small circuit to be built using just reissters and a VGA connector.
 
-## VGA Rainbow
+
+
+
+### VGA Rainbow
 ![vgarainbow](https://github.com/robin7g/rg-iceFUN/blob/main/images/vgarainbow.gif)
 
-## VGA Circles
+### VGA Circles
 ![vgacircles](https://github.com/robin7g/rg-iceFUN/blob/main/images/vgacircles.gif)
 
-## VGA Bitmap
+### VGA Bitmap
 ![vgabitmap](https://github.com/robin7g/rg-iceFUN/blob/main/images/vgabitmap.png)
