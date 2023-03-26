@@ -1,5 +1,5 @@
 /*
- *  Show a 128 x 96  6 bit colour image
+ *  Show a 160 x 120  6 bit colour image
  * 
  *  Copyright(C) 2022 Robin Grosset
  *
@@ -81,19 +81,24 @@ module top (
 
 	reg [10:0] x;
 	reg [10:0] y;
+	reg [10:0] div5x;
+	reg [10:0] div5y;
+
 
 	reg [7:0] data;
 
 	// Store the image in embedded RAM
-	// this is an 8 bit bitmap 128 x 96 pixels
+	// this is an 8 bit bitmap 160 x 120 pixels
 	// colour data is only in the first 6 bits 
 	// of each byte.  
-	reg [7:0] image [0:12288];
+	//
+	// Note this image consumes 93% of the iceFUN RAM
+
+	reg [5:0] image [0:19200];
 
 	initial begin
-		$readmemh("image.hex", image);
+		$readmemb("image.bin", image);
 	end
-
 
 	always @(posedge clk)
 	begin
@@ -104,15 +109,16 @@ module top (
 		begin
 			// now horz video range
 			if (y >= 0 && y < 640)
-			begin				
-				
-				data <= image[ ((x/5) * 128) + (y/5) ];
-				vga_r1 <= data[7];
-				vga_r2 <= data[6];
-				vga_g1 <= data[5];
-				vga_g2 <= data[4];
-				vga_b1 <= data[3];
-				vga_b2 <= data[2];				
+			begin		
+				div5x <= x>>2;
+				div5y <= y>>2;						
+				data <= image[ ((div5x) * 160) + (div5y) ];												
+				vga_r1 <= data[5];
+				vga_r2 <= data[4];
+				vga_g1 <= data[3];
+				vga_g2 <= data[2];
+				vga_b1 <= data[1];
+				vga_b2 <= data[0];				
 	
 			end
 			else
