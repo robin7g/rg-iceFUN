@@ -44,7 +44,7 @@ make burn
 
 ## The VGA projects 
 
-All the project which have VGA in thier title require a small circuit to be built using just resisters and a VGA connector. The schematic for this is shown below. 
+All the project which have VGA in their folder name require a small circuit to be built using just resisters and a VGA connector. The schematic for this is shown below. 
 
 ![iceFUNVGASchematic](https://github.com/robin7g/rg-iceFUN/blob/main/images/IceFUNVGASchematic.jpg)
 
