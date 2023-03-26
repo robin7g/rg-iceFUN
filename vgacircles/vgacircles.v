@@ -1,5 +1,5 @@
 /*
- *  VGA Moving Rainbow Circle Patterns
+ *  VGA Moving Rainbow Circle Patterns uses 6% of the Ice40 LCs
  * 
  *  The VGA signal has 2 bits per RGB colour channel
  *  6 bits of colour overall = 64 colours
@@ -76,50 +76,29 @@ module top (
 	reg [9:0] hc;
 	reg [9:0] vc;
 
-	parameter  _cBK = 6'b000000; // Black
-	parameter  _cWT = 6'b111111; // White
+		reg [119:0] colors = { // each bar is 36-ish pixels each
+		6'b001100, // 0  - Green
+		6'b011100, // 1
+		6'b101100, // 2
+		6'b111100, // 3  - Yellow
+		6'b111000, // 4
+		6'b110100, // 5
+		6'b110000, // 6 - Red
+		6'b110001, // 7
+		6'b110010, // 8
+		6'b110011, // 9 - Purple
+		6'b100011, // 10
+		6'b010011, // 11
+		6'b000011, // 12 - Blue
+		6'b000111, // 13 
+		6'b001011, // 14
+		6'b001111, // 15 - Cyan
+		6'b001110, // 16
+		6'b001101, // 17
+		6'b111111, // White
+		6'b000000 // Black
+	}; // from 17 to 0 this colour bar car cycle as you go back to green .. 
 
-	// Here are the rainbow colours
-	parameter  _cG0 = 6'b001100; // Green
-	parameter  _cG1 = 6'b011100;
-	parameter  _cG2 = 6'b101100;
-	parameter  _cY0 = 6'b111100; // Yellow
-	parameter  _cY1 = 6'b111000;
-	parameter  _cY2 = 6'b110100;
-	parameter  _cR0 = 6'b110000; // Red
-	parameter  _cR1 = 6'b110001; 
-	parameter  _cR2 = 6'b110010; 
-	parameter  _cP0 = 6'b110011; // Purple
-	parameter  _cP1 = 6'b100011; 
-	parameter  _cP2 = 6'b010011; 
-	parameter  _cB0 = 6'b000011; // Blue
-	parameter  _cB1 = 6'b000111; 
-	parameter  _cB2 = 6'b001011; 
-	parameter  _cC0 = 6'b001111; // Cyan
-	parameter  _cC1 = 6'b001110; 
-	parameter  _cC2 = 6'b001101; 
-	// go back to green _cG0
-
-	reg [107:0] colors = { // Rainbow Colour Array
-		_cG0, // 0  - Green
-		_cG1, // 1
-		_cG2, // 2
-		_cY0, // 3  - Yellow
-		_cY1, // 4
-		_cY2, // 5
-		_cR0, // 6 - Red
-		_cR1, // 7
-		_cR2, // 8
-		_cP0, // 9 - Purple
-		_cP1, // 10
-		_cP2, // 11
-		_cB0, // 12 - Blue
-		_cB1, // 13 
-		_cB2, // 14
-		_cC0, // 15 - Cyan
-		_cC1, // 16
-		_cC2 // 17
-	}; // this colour array can cycle back to green .. 
 
 	always @(posedge clk)
 	begin
@@ -151,15 +130,21 @@ module top (
 
 	reg [9:0] idx = 0;
 	reg [9:0] radius = 0; 
-	
+	reg [10:0] x;
+	reg [10:0] y;
+	reg [3:0] x_mod_16;
+	reg [0:0] x_mod_2;
+
 	
 	always @(hc,vc)
 	begin
+		x <= (vc-vbp);
+		y <= (hc-hbp);
 		// first check if we're within vertical active video range
-		if (vc >= vbp && vc < vfp)
+		if (x >= 0 && x < 480)
 		begin
 			// hbp = 144
-			if (hc >= hbp && hc < (hbp+640))
+			if (y >= 0 && y < 640)
 			begin
 				// The idea for this code came from ChatGPT it suggested this next line
 				// would generate iteresting spirals. 
@@ -170,14 +155,14 @@ module top (
 				// so I adapted the idea added rainbow colours and movement and 
 				// replaced sqrt and pow with multiply and right shift operations. 
 
-				calc1 = (hc-hbp - 320 + (offset[31:3])) * (hc-hbp - 320)+ (offset[31:3]);
-				calc2 = (vc-vbp - 240 + (offset[31:3])) * (vc-vbp - 240)+ (offset[31:3]);
+				calc1 = (y - 320 + (offset[31:3])) * (y - 320)+ (offset[31:3]);
+				calc2 = (x - 240 + (offset[31:3])) * (x - 240)+ (offset[31:3]);
 
 				radius = calc1 + calc2 ;
 				
 				// This causes central rotating circle of colours. Only the last 5 bits
 				// are used to select the colour. 
-				radius = radius >> 4;
+				radius = radius >> 5;
 
 				if (radius>20480) 
 				begin
@@ -188,7 +173,11 @@ module top (
 					radius = radius >> 3;
 				end
 
-				idx = (107-(6*((radius)%18)));
+				idx = radius; 
+				x_mod_16 = idx[3:0]; // x % 16
+    				x_mod_2 = idx[0];    // x % 2
+				idx = (x_mod_16+x_mod_2) * 6; // basically mod 18 * 6
+				idx = (107-idx);
 				vga_r1 = colors[ idx - 0];
 				vga_r2 = colors[ idx - 1];
 				vga_g1 = colors[ idx - 2];
